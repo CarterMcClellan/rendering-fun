@@ -4,6 +4,7 @@ import './App.css';
 import DivRenderer from './DivRenderer';
 import CanvasRenderer from './CanvasRenderer';
 import FabricRenderer from './FabricRenderer';
+import SvgRenderer, { SVGRenderer } from './SvgRenderer';
 
 export const CANVAS_WIDTH = 700;
 export const CANVAS_HEIGHT = 600;
@@ -16,11 +17,11 @@ export type SVGElement = {
 
 const SHAPES = [
   (width: number, height: number) => 
-    `<svg width="${width}" height="${height}" viewBox="0 0 ${20} ${20}"><circle cx="10" cy="10" r="10" fill="blue"/></svg>`,
+    `<svg width="${width}" height="${height}" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="blue"/></svg>`,
   (width: number, height: number) => 
-    `<svg width="${width}" height="${height}" viewBox="0 0 ${20} ${20}"><rect x="2" y="2" width="16" height="16" fill="red"/></svg>`,
+    `<svg width="${width}" height="${height}" viewBox="0 0 20 20"><rect x="2" y="2" width="16" height="16" fill="red"/></svg>`,
   (width: number, height: number) => 
-    `<svg width="${width}" height="${height}" viewBox="0 0 ${20} ${20}"><polygon points="10,0 20,20 0,20" fill="green"/></svg>`
+    `<svg width="${width}" height="${height}" viewBox="0 0 20 20"><polygon points="10,0 20,20 0,20" fill="green"/></svg>`
 ];
 
 const createRandomElement = (): SVGElement => {
@@ -45,7 +46,7 @@ function App() {
   const [elements, setElements] = useState<SVGElement[]>([]);
   const [fps, setFps] = useState<number>(0);
   const [desiredCount, setDesiredCount] = useState<number>(1);
-  const [renderMode, setRenderMode] = useState<'canvas' | 'div' | 'fabric'>('canvas');
+  const [renderMode, setRenderMode] = useState<'canvas' | 'div' | 'fabric' | 'svg'>('canvas');
   const frameRef = useRef<number>(0);
   const previousTimeRef = useRef<number>(0);
   const framesRef = useRef<number>(0);
@@ -55,6 +56,7 @@ function App() {
     if (renderMode === 'canvas') return <CanvasRenderer elements={elements} />;
     if (renderMode === 'div') return <DivRenderer elements={elements} />;
     if (renderMode === 'fabric') return <FabricRenderer elements={elements} />;
+    if (renderMode === 'svg') return <SVGRenderer elements={elements} />;
   }
 
   const updateElements = () => {
@@ -134,12 +136,13 @@ function App() {
         </div>
         <select 
           value={renderMode}
-          onChange={(e) => setRenderMode(e.target.value as 'canvas' | 'div' | 'fabric')}
+          onChange={(e) => setRenderMode(e.target.value as 'canvas' | 'div' | 'fabric' | 'svg')}
           className="w-full bg-white text-black rounded p-1"
         >
           <option value="canvas">Canvas Renderer</option>
           <option value="div">Div Renderer</option>
           <option value="fabric">Fabric Renderer</option>
+          <option value="svg">SVG Renderer</option>
         </select>
       </div>
       {getRenderer()}

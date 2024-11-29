@@ -36,8 +36,8 @@ type Props = {
 }
 
 export const DivRenderer = ({ elements }: Props) => {
+  // overflow hidden -> hides svgs if they move outside the canvas
   return (
-    // overflow hidden -> hides svgs if they move outside the canvas
     <div 
         className="relative bg-gray-200 rounded-lg overflow-hidden"
         style={{ width: `${CANVAS_WIDTH}px`, height: `${CANVAS_HEIGHT}px` }}
