@@ -5,6 +5,7 @@ import DivRenderer from './DivRenderer';
 import CanvasRenderer from './CanvasRenderer';
 import FabricRenderer from './FabricRenderer';
 import SvgRenderer, { SVGRenderer } from './SvgRenderer';
+import { SkiaCanvasRenderer } from './SkiaRenderer';
 
 export const CANVAS_WIDTH = 700;
 export const CANVAS_HEIGHT = 600;
@@ -46,7 +47,7 @@ function App() {
   const [elements, setElements] = useState<SVGElement[]>([]);
   const [fps, setFps] = useState<number>(0);
   const [desiredCount, setDesiredCount] = useState<number>(1);
-  const [renderMode, setRenderMode] = useState<'canvas' | 'div' | 'fabric' | 'svg'>('canvas');
+  const [renderMode, setRenderMode] = useState<'canvas' | 'div' | 'fabric' | 'svg' | 'skia'>('canvas');
   const frameRef = useRef<number>(0);
   const previousTimeRef = useRef<number>(0);
   const framesRef = useRef<number>(0);
@@ -57,6 +58,7 @@ function App() {
     if (renderMode === 'div') return <DivRenderer elements={elements} />;
     if (renderMode === 'fabric') return <FabricRenderer elements={elements} />;
     if (renderMode === 'svg') return <SVGRenderer elements={elements} />;
+    if (renderMode === 'skia') return <SkiaCanvasRenderer elements={elements} />;
   }
 
   const updateElements = () => {
@@ -136,13 +138,14 @@ function App() {
         </div>
         <select 
           value={renderMode}
-          onChange={(e) => setRenderMode(e.target.value as 'canvas' | 'div' | 'fabric' | 'svg')}
+          onChange={(e) => setRenderMode(e.target.value as 'canvas' | 'div' | 'fabric' | 'svg' | 'skia')}
           className="w-full bg-white text-black rounded p-1"
         >
           <option value="canvas">Canvas Renderer</option>
           <option value="div">Div Renderer</option>
           <option value="fabric">Fabric Renderer</option>
           <option value="svg">SVG Renderer</option>
+          <option value="skia">Skia Renderer</option>
         </select>
       </div>
       {getRenderer()}
